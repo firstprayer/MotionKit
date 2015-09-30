@@ -28,7 +28,7 @@ import CoreMotion
 }
 
 
-(MotionKit) public class MotionKit {
+public class MotionKit {
     
     let manager = CMMotionManager()
     var delegate: MotionKitDelegate?
@@ -60,19 +60,20 @@ import CoreMotion
         if manager.accelerometerAvailable {
             manager.accelerometerUpdateInterval = interval
             manager.startAccelerometerUpdatesToQueue(NSOperationQueue()) {
-                (data: CMAccelerometerData!, error: NSError!) in
+                (data: CMAccelerometerData?, error: NSError?) in
                 
                 if let isError = error {
                     NSLog("Error: %@", isError)
                 }
-                valX = data.acceleration.x
-                valY = data.acceleration.y
-                valZ = data.acceleration.z
+                
+                valX = data!.acceleration.x
+                valY = data!.acceleration.y
+                valZ = data!.acceleration.z
                 
                 if values != nil{
                     values!(x: valX,y: valY,z: valZ)
                 }
-                var absoluteVal = sqrt(valX * valX + valY * valY + valZ * valZ)
+                let absoluteVal = sqrt(valX * valX + valY * valY + valZ * valZ)
                 self.delegate?.retrieveAccelerometerValues!(valX, y: valY, z: valZ, absoluteValue: absoluteVal)
             }
             
@@ -98,19 +99,19 @@ import CoreMotion
         if manager.gyroAvailable{
             manager.gyroUpdateInterval = interval
             manager.startGyroUpdatesToQueue(NSOperationQueue()) {
-                (data: CMGyroData!, error: NSError!) in
+                (data: CMGyroData?, error: NSError?) in
                 
                 if let isError = error{
                     NSLog("Error: %@", isError)
                 }
-                valX = data.rotationRate.x
-                valY = data.rotationRate.y
-                valZ = data.rotationRate.z
+                valX = data!.rotationRate.x
+                valY = data!.rotationRate.y
+                valZ = data!.rotationRate.z
                 
                 if values != nil{
                     values!(x: valX, y: valY, z: valZ)
                 }
-                var absoluteVal = sqrt(valX * valX + valY * valY + valZ * valZ)
+                let absoluteVal = sqrt(valX * valX + valY * valY + valZ * valZ)
                 self.delegate?.retrieveGyroscopeValues!(valX, y: valY, z: valZ, absoluteValue: absoluteVal)
             }
             
@@ -135,19 +136,19 @@ import CoreMotion
         if manager.magnetometerAvailable {
             manager.magnetometerUpdateInterval = interval
             manager.startMagnetometerUpdatesToQueue(NSOperationQueue()){
-                (data: CMMagnetometerData!, error: NSError!) in
+                (data: CMMagnetometerData?, error: NSError?) in
                 
                 if let isError = error{
                     NSLog("Error: %@", isError)
                 }
-                valX = data.magneticField.x
-                valY = data.magneticField.y
-                valZ = data.magneticField.z
+                valX = data!.magneticField.x
+                valY = data!.magneticField.y
+                valZ = data!.magneticField.z
                 
                 if values != nil{
                     values!(x: valX, y: valY, z: valZ)
                 }
-                var absoluteVal = sqrt(valX * valX + valY * valY + valZ * valZ)
+                let absoluteVal = sqrt(valX * valX + valY * valY + valZ * valZ)
                 self.delegate?.retrieveMagnetometerValues!(valX, y: valY, z: valZ, absoluteValue: absoluteVal)
             }
             
@@ -172,15 +173,15 @@ import CoreMotion
         if manager.deviceMotionAvailable{
             manager.deviceMotionUpdateInterval = interval
             manager.startDeviceMotionUpdatesToQueue(NSOperationQueue()){
-                (data: CMDeviceMotion!, error: NSError!) in
+                (data: CMDeviceMotion?, error: NSError?) in
                 
                 if let isError = error{
                     NSLog("Error: %@", isError)
                 }
                 if values != nil{
-                    values!(deviceMotion: data)
+                    values!(deviceMotion: data!)
                 }
-                self.delegate?.retrieveDeviceMotionObject!(data)
+                self.delegate?.retrieveDeviceMotionObject!(data!)
             }
             
         } else {
@@ -201,14 +202,14 @@ import CoreMotion
         if manager.deviceMotionAvailable{
             manager.deviceMotionUpdateInterval = interval
             manager.startDeviceMotionUpdatesToQueue(NSOperationQueue()){
-                (data: CMDeviceMotion!, error: NSError!) in
+                (data: CMDeviceMotion?, error: NSError?) in
                 
                 if let isError = error{
                     NSLog("Error: %@", isError)
                 }
-                valX = data.userAcceleration.x
-                valY = data.userAcceleration.y
-                valZ = data.userAcceleration.z
+                valX = data!.userAcceleration.x
+                valY = data!.userAcceleration.y
+                valZ = data!.userAcceleration.z
                 
                 if values != nil{
                     values!(x: valX, y: valY, z: valZ)
@@ -235,20 +236,19 @@ import CoreMotion
         if manager.deviceMotionAvailable{
             manager.deviceMotionUpdateInterval = interval
             manager.startDeviceMotionUpdatesToQueue(NSOperationQueue()){
-                (data: CMDeviceMotion!, error: NSError!) in
+                (data: CMDeviceMotion?, error: NSError?) in
                 
                 if let isError = error{
                     NSLog("Error: %@", isError)
                 }
-                valX = data.gravity.x
-                valY = data.gravity.y
-                valZ = data.gravity.z
+                valX = data!.gravity.x
+                valY = data!.gravity.y
+                valZ = data!.gravity.z
                 
                 if values != nil{
                     values!(x: valX, y: valY, z: valZ)
                 }
                 
-                var absoluteVal = sqrt(valX * valX + valY * valY + valZ * valZ)
                 self.delegate?.getGravityAccelerationValFromDeviceMotion!(valX, y: valY, z: valZ)
             }
             
@@ -268,16 +268,16 @@ import CoreMotion
         if manager.deviceMotionAvailable{
             manager.deviceMotionUpdateInterval = interval
             manager.startDeviceMotionUpdatesToQueue(NSOperationQueue()){
-                (data: CMDeviceMotion!, error: NSError!) in
+                (data: CMDeviceMotion?, error: NSError?) in
                 
                 if let isError = error{
                     NSLog("Error: %@", isError)
                 }
                 if values != nil{
-                    values!(attitude: data.attitude)
+                    values!(attitude: data!.attitude)
                 }
                 
-                self.delegate?.getAttitudeFromDeviceMotion!(data.attitude)
+                self.delegate?.getAttitudeFromDeviceMotion!(data!.attitude)
             }
             
         } else {
@@ -298,20 +298,19 @@ import CoreMotion
         if manager.deviceMotionAvailable{
             manager.deviceMotionUpdateInterval = interval
             manager.startDeviceMotionUpdatesToQueue(NSOperationQueue()){
-                (data: CMDeviceMotion!, error: NSError!) in
+                (data: CMDeviceMotion?, error: NSError?) in
                 
                 if let isError = error{
                     NSLog("Error: %@", isError)
                 }
-                valX = data.rotationRate.x
-                valY = data.rotationRate.y
-                valZ = data.rotationRate.z
+                valX = data!.rotationRate.x
+                valY = data!.rotationRate.y
+                valZ = data!.rotationRate.z
                 
                 if values != nil{
                     values!(x: valX, y: valY, z: valZ)
                 }
                 
-                var absoluteVal = sqrt(valX * valX + valY * valY + valZ * valZ)
                 self.delegate?.getRotationRateFromDeviceMotion!(valX, y: valY, z: valZ)
             }
             
@@ -335,15 +334,15 @@ import CoreMotion
         if manager.deviceMotionAvailable{
             manager.deviceMotionUpdateInterval = interval
             manager.startDeviceMotionUpdatesToQueue(NSOperationQueue()){
-                (data: CMDeviceMotion!, error: NSError!) in
+                (data: CMDeviceMotion?, error: NSError?) in
                 
                 if let isError = error{
                     NSLog("Error: %@", isError)
                 }
-                valX = data.magneticField.field.x
-                valY = data.magneticField.field.y
-                valZ = data.magneticField.field.z
-                valAccuracy = data.magneticField.accuracy.rawValue
+                valX = data!.magneticField.field.x
+                valY = data!.magneticField.field.y
+                valZ = data!.magneticField.field.z
+                valAccuracy = data!.magneticField.accuracy.rawValue
                 
                 
                 if values != nil{
